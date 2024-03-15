@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Bowofade Oyerinde',
             'email' => 'contact@bowofade.com',
             'phone' => '07081353229',
-            'current_role' => 'superadmin',
+            'current_role' => 'super-admin',
             'password' => bcrypt(env('PASSWORD'))
         ]);
         \App\Models\User::factory()->create([
