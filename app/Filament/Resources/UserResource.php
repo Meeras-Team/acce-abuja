@@ -2,16 +2,19 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\UserResource\Pages;
-use App\Filament\Resources\UserResource\RelationManagers;
-use App\Models\User;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
+use App\Models\User;
 use Filament\Tables;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Resources\Resource;
+use function Pest\Laravel\options;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\UserResource\Pages;
+
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\UserResource\RelationManagers;
 
 class UserResource extends Resource
 {
@@ -28,19 +31,31 @@ class UserResource extends Resource
                     ->maxLength(255),
                 Forms\Components\TextInput::make('email')
                     ->email()
+                    ->unique(ignoreRecord: true)
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('phone')
                     ->tel()
+                    ->unique(ignoreRecord: true)
                     ->maxLength(255),
-                Forms\Components\DateTimePicker::make('email_verified_at'),
+                Forms\Components\Select::make('current_role')
+                    ->required()
+                    ->options([
+                        'editor' => 'Editor',
+                        'blogger' => 'Blogger'
+                    ]),
                 Forms\Components\TextInput::make('password')
                     ->password()
                     ->required()
+                    ->confirmed()
+                    ->revealable()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('current_role')
+                Forms\Components\TextInput::make('password_confirmation')
+                    ->password()
+                    ->revealable()
                     ->required()
                     ->maxLength(255),
+
             ]);
     }
 
@@ -54,25 +69,32 @@ class UserResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('phone')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('email_verified_at')
-                    ->dateTime()
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('current_role')
+                    ->label('Role')
+                    ->badge()
+                    ->color(
+                        fn (string $state): string => match ($state) {
+                            'super-admin' => 'danger',
+                            'admin' => 'warning',
+                            'editor' => 'success',
+                            'blogger' => 'info',
+                        }
+                    )
+                    ->extraAttributes(['class' => 'capitalize'])
                     ->searchable(),
+
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
+                    ->date()
+                    // ->diffForHuman()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: false),
             ])
             ->filters([
                 //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make()->hidden(fn (Model $record) => $record->current_role == 'super-admin'),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

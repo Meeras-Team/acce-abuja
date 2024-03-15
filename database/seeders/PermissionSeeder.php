@@ -54,6 +54,7 @@ class PermissionSeeder extends Seeder
                 $permission = Permission::firstOrCreate(['name' => $this->getOperation($op, $perm)]);
             }
         }
+
         Role::where('name', 'super-admin')->first()->givePermissionTo(Permission::all());
 
         foreach ($permissions["admin"] as $perm => $ops) {
