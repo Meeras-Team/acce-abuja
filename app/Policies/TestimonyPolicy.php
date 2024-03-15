@@ -13,7 +13,7 @@ class TestimonyPolicy
      */
     public function viewAny(User $user): bool
     {
-        //
+        return  $user->can('read testimony');
     }
 
     /**
@@ -21,7 +21,7 @@ class TestimonyPolicy
      */
     public function view(User $user, Testimony $testimony): bool
     {
-        //
+        return  $user->can('read testimony');
     }
 
     /**
@@ -29,7 +29,7 @@ class TestimonyPolicy
      */
     public function create(User $user): bool
     {
-        //
+        return  $user->can('create testimony');
     }
 
     /**
@@ -37,7 +37,7 @@ class TestimonyPolicy
      */
     public function update(User $user, Testimony $testimony): bool
     {
-        //
+        return  $user->can('update testimony');
     }
 
     /**
@@ -45,7 +45,7 @@ class TestimonyPolicy
      */
     public function delete(User $user, Testimony $testimony): bool
     {
-        //
+        return  $user->can('delete testimony');
     }
 
     /**
@@ -53,7 +53,7 @@ class TestimonyPolicy
      */
     public function restore(User $user, Testimony $testimony): bool
     {
-        //
+        return  $user->hasRoles(['super-admin', 'admin']);
     }
 
     /**
@@ -61,6 +61,6 @@ class TestimonyPolicy
      */
     public function forceDelete(User $user, Testimony $testimony): bool
     {
-        //
+        return  $user->hasRoles(['super-admin', 'admin']);
     }
 }

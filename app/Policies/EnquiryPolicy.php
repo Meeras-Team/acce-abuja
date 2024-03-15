@@ -13,7 +13,7 @@ class EnquiryPolicy
      */
     public function viewAny(User $user): bool
     {
-        //
+        return   $user->can('read enquiry');
     }
 
     /**
@@ -21,7 +21,7 @@ class EnquiryPolicy
      */
     public function view(User $user, Enquiry $enquiry): bool
     {
-        //
+        return   $user->can('read enquiry');
     }
 
     /**
@@ -29,7 +29,7 @@ class EnquiryPolicy
      */
     public function create(User $user): bool
     {
-        //
+        return   $user->can('create enquiry');
     }
 
     /**
@@ -37,7 +37,7 @@ class EnquiryPolicy
      */
     public function update(User $user, Enquiry $enquiry): bool
     {
-        //
+        return   $user->can('update enquiry');
     }
 
     /**
@@ -45,7 +45,7 @@ class EnquiryPolicy
      */
     public function delete(User $user, Enquiry $enquiry): bool
     {
-        //
+        return   $user->can('delete enquiry');
     }
 
     /**
@@ -53,7 +53,7 @@ class EnquiryPolicy
      */
     public function restore(User $user, Enquiry $enquiry): bool
     {
-        //
+        return  $user->hasRoles(['super-admin', 'admin']);
     }
 
     /**
@@ -61,6 +61,6 @@ class EnquiryPolicy
      */
     public function forceDelete(User $user, Enquiry $enquiry): bool
     {
-        //
+        return  $user->hasRoles(['super-admin', 'admin']);
     }
 }
