@@ -21,6 +21,17 @@ class User extends Authenticatable implements FilamentUser
      *
      * @var array<int, string>
      */
+
+    static function boot()
+    {
+        parent::boot();
+
+        // create profile for every user created
+        self::created(function ($user) {
+            // attach role when created
+            $user->assignRole($user->current_role);
+        });
+    }
     protected $fillable = [
         'name',
         'email',
