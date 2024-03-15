@@ -13,7 +13,7 @@ class PostPolicy
      */
     public function viewAny(User $user): bool
     {
-        return   $user->can('read enquiry');
+        return   $user->can('read post');
     }
 
     /**
@@ -21,7 +21,7 @@ class PostPolicy
      */
     public function view(User $user, Post $post): bool
     {
-        return   $user->can('read enquiry');
+        return   $user->can('read post');
     }
 
     /**
@@ -29,7 +29,7 @@ class PostPolicy
      */
     public function create(User $user): bool
     {
-        return   $user->can('create enquiry');
+        return   $user->can('create post');
     }
 
     /**
@@ -37,7 +37,7 @@ class PostPolicy
      */
     public function update(User $user, Post $post): bool
     {
-        return   $user->can('update enquiry');
+        return   $user->can('update post');
     }
 
     /**
@@ -45,7 +45,7 @@ class PostPolicy
      */
     public function delete(User $user, Post $post): bool
     {
-        return   $user->can('delete enquiry');
+        return   $user->can('delete post');
     }
 
     /**

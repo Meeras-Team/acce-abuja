@@ -34,14 +34,14 @@ class DatabaseSeeder extends Seeder
             'name' => 'Test User',
             'email' => 'editor@acce-abuja.com',
             'phone' => '08012340000',
-            'current_role' => 'admin',
+            'current_role' => 'editor',
             'password' => bcrypt(env('EDITOR_PASSWORD'))
         ]);
         \App\Models\User::factory()->create([
             'name' => 'Test User',
             'email' => 'blogger@acce-abuja.com',
             'phone' => '08010001000',
-            'current_role' => 'admin',
+            'current_role' => 'blogger',
             'password' => bcrypt(env('BLOGGER_PASSWORD'))
         ]);
         $this->call([
