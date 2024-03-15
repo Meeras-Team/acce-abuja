@@ -20,7 +20,7 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-users';
 
     public static function form(Form $form): Form
     {
@@ -49,12 +49,14 @@ class UserResource extends Resource
                     ->required()
                     ->confirmed()
                     ->revealable()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->hiddenOn('edit'),
                 Forms\Components\TextInput::make('password_confirmation')
                     ->password()
                     ->revealable()
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->hiddenOn('edit'),
 
             ]);
     }
