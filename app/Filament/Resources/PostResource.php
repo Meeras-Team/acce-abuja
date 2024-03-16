@@ -2,22 +2,27 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\PostResource\Pages;
-use App\Filament\Resources\PostResource\RelationManagers;
-use App\Models\Post;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
+use App\Models\Post;
 use Filament\Tables;
+use Filament\Forms\Get;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Illuminate\Support\Str;
+use Filament\Resources\Resource;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\PostResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\PostResource\RelationManagers;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
 class PostResource extends Resource
 {
     protected static ?string $model = Post::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-newspaper';
 
     public static function form(Form $form): Form
     {
@@ -29,14 +34,23 @@ class PostResource extends Resource
                 Forms\Components\TextInput::make('slug')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\Textarea::make('cover_image')
-                    ->columnSpanFull(),
+                Forms\Components\FileUpload::make('cover_image')
+                    ->image()
+                    ->directory('team')
+                    ->getUploadedFileNameForStorageUsing(
+                        fn (TemporaryUploadedFile $file, Get $get): string => (string) str(Str::replace(' ', '-', $get('name') . "." . $file->getClientOriginalExtension()))
+                            ->prepend('acce-abuja-'),
+                    )
+                    ->imageEditor(),
                 Forms\Components\Textarea::make('summary')
                     ->columnSpanFull(),
-                Forms\Components\Textarea::make('body')
+                Forms\Components\MarkdownEditor::make('body')
                     ->columnSpanFull(),
-                Forms\Components\TextInput::make('user_id')
-                    ->numeric(),
+                Forms\Components\Select::make('user_id')
+                    ->label('Author')
+                    ->default(auth()->id())
+                    ->relationship('author', 'name')
+                ,
                 Forms\Components\Select::make('category_id')
                     ->relationship('category', 'name'),
             ]);
@@ -46,20 +60,17 @@ class PostResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\ImageColumn::make('image'),
                 Tables\Columns\TextColumn::make('title')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('slug')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('user_id')
-                    ->numeric()
+                Tables\Columns\TextColumn::make('author.name')
+                    ->label('Author')
+                    ->extraAttributes(['class', 'capitalize'])
                     ->sortable(),
                 Tables\Columns\TextColumn::make('category.name')
-                    ->numeric()
+                    ->extraAttributes(['class', 'capitalize'])
+                    ->badge()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
