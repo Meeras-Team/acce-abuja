@@ -17,7 +17,7 @@ class PostsAPiResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
-            'image' => $this->cover_image,
+            'image' => env('APP_URL') . '/' . $this->cover_image,
             'slug' => $this->slug,
             'author' => $this->author?->name ?? 'No Author',
             'create_at' => $this->created_at->format('d M, Y')

@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class PostApiResource extends JsonResource
+class TestimoniesAPiResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,12 +16,10 @@ class PostApiResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'title' => $this->designation,
             'image' => env('APP_URL') . '/' . $this->cover_image,
-            'title' => $this->title,
-            'summary' => $this->summary,
             'body' => $this->body,
-            'slug' => $this->slug,
-            'author' => $this->author?->name ?? 'No Author',
+            'name' => $this->name,
             'create_at' => $this->created_at->format('d M, Y')
         ];
     }
