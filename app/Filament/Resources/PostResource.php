@@ -31,12 +31,11 @@ class PostResource extends Resource
                 Forms\Components\TextInput::make('title')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('slug')
-                    ->required()
-                    ->maxLength(255),
+                Forms\Components\Select::make('category_id')
+                    ->relationship('category', 'name'),
                 Forms\Components\FileUpload::make('cover_image')
                     ->image()
-                    ->directory('team')
+                    ->directory('post')
                     ->getUploadedFileNameForStorageUsing(
                         fn (TemporaryUploadedFile $file, Get $get): string => (string) str(Str::replace(' ', '-', $get('name') . "." . $file->getClientOriginalExtension()))
                             ->prepend('acce-abuja-'),
@@ -49,18 +48,17 @@ class PostResource extends Resource
                 Forms\Components\Select::make('user_id')
                     ->label('Author')
                     ->default(auth()->id())
-                    ->relationship('author', 'name')
-                ,
-                Forms\Components\Select::make('category_id')
-                    ->relationship('category', 'name'),
-            ]);
+                    ->hidden()
+                    ->relationship('author', 'name'),
+
+            ])->columns(3);
     }
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                Tables\Columns\ImageColumn::make('image'),
+                Tables\Columns\ImageColumn::make('cover_image'),
                 Tables\Columns\TextColumn::make('title')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('author.name')
@@ -80,7 +78,11 @@ class PostResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->mutateFormDataUsing(function (array $data): array {
+                        $data['user_id'] = auth()->id();
+                        return $data;
+                    }),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

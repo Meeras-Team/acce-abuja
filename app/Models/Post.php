@@ -24,20 +24,20 @@ class Post extends Model
         );
     }
 
-    protected function body(): Attribute
-    {
-        return Attribute::make(
-            set: fn (array $value) => implode("\n\n", $value)
-            // set: fn (array $value) => $value
-        );
-    }
+    // protected function body(): Attribute
+    // {
+    //     return Attribute::make(
+    //         set: fn (array $value) => implode("\n\n", $value)
+    //         // set: fn (array $value) => $value
+    //     );
+    // }
 
-    protected function summary(): Attribute
-    {
-        return Attribute::make(
-            set: fn (array $value) => implode("\n\n", $value)
-        );
-    }
+    // protected function summary(): Attribute
+    // {
+    //     return Attribute::make(
+    //         set: fn (string $value) => implode("\n\n", $value)
+    //     );
+    // }
 
 
     public function category(): BelongsTo
