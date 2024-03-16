@@ -35,7 +35,7 @@ class Post extends Model
     // protected function summary(): Attribute
     // {
     //     return Attribute::make(
-    //         set: fn (string $value) => implode("\n\n", $value)
+    //         set: fn (array $value) => implode("\n\n", $value)
     //     );
     // }
 
