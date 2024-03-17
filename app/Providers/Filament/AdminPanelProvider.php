@@ -25,11 +25,11 @@ class AdminPanelProvider extends PanelProvider
         return $panel
             ->default()
             ->id('admin')
+            // ->path('admin')
+            ->login()
             ->passwordResetRoutePrefix('password-reset')
             ->passwordResetRequestRouteSlug('request')
             ->passwordResetRouteSlug('reset')
-            // ->path('admin')
-            ->login()
             ->colors([
                 'primary' => Color::Amber,
             ])
