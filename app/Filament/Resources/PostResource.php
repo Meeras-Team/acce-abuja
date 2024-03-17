@@ -83,6 +83,7 @@ class PostResource extends Resource
                         $data['user_id'] = auth()->id();
                         return $data;
                     }),
+                Tables\Actions\DeleteAction::make()
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
